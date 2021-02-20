@@ -1,25 +1,30 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Route, Switch, Redirect } from 'react-router-dom';
+import { privateRoutes } from './routers';
+
+import FrameOut from './components/FrameOut'
+
+
+
+export default class App extends Component {
+  render() {
+    return (
+      <FrameOut>
+        <Switch>
+          {
+            privateRoutes.map((item, index) => {
+              return (
+                <Route key={index} exact={item.exact} path={item.pathname} render={(rootProps) => {
+                  return <item.component {...rootProps} />
+                }} />
+              )
+            })
+          }
+          <Redirect exact from="/admin" to={privateRoutes[0].pathname} />
+          <Redirect to="/404" />
+        </Switch>
+      </FrameOut>
+    )
+  }
 }
-
-export default App;
